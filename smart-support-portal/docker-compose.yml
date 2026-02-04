@@ -1,0 +1,87 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: support
+      POSTGRES_PASSWORD: supportpass
+      POSTGRES_DB: support
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./php-app/db:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  analyzer:
+    build:
+      context: ./python-analyzer
+      dockerfile: Dockerfile
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    healthcheck:
+      # Use a python-based healthcheck because slim images may not include curl/wget
+      test: ["CMD-SHELL", "python -c \"import urllib.request, sys; r=urllib.request.urlopen('http://127.0.0.1:8000/health'); sys.exit(0 if r.getcode()==200 else 1)\""]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+
+  php:
+    build:
+      context: ./php-app
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: support
+      DB_USER: support
+      DB_PASSWORD: supportpass
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      ANALYZER_HOST: analyzer
+      ANALYZER_PORT: 8000
+    volumes:
+      - ./php-app:/var/www/html:cached
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      analyzer:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./php-app:/var/www/html:ro
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+      - analyzer
+
+volumes:
+  db-data:
+  redis-data:

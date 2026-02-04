@@ -1,0 +1,60 @@
+nohup: ignoring input
+127.0.0.1 - - [04/Feb/2026 14:41:19] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [04/Feb/2026 14:41:20] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [04/Feb/2026 14:41:24] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [04/Feb/2026 14:42:24] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [04/Feb/2026 14:42:24] "GET / HTTP/1.1" 404 -
+127.0.0.1 - - [04/Feb/2026 14:42:24] "GET /health HTTP/1.1" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 57276)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 424, in handle_one_request
+    method()
+  File "/home/rohan.matre/Downloads/Docker/Docker-Advanced-Project/smart-support-portal/python-analyzer/dev_server.py", line 17, in do_GET
+    self.wfile.write(b'{"status":"ok"}')
+  File "/usr/lib/python3.12/socketserver.py", line 840, in write
+    self._sock.sendall(b)
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------
+127.0.0.1 - - [04/Feb/2026 14:43:11] "GET /health HTTP/1.1" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 38644)
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+    self.handle()
+  File "/usr/lib/python3.12/http/server.py", line 436, in handle
+    self.handle_one_request()
+  File "/usr/lib/python3.12/http/server.py", line 424, in handle_one_request
+    method()
+  File "/home/rohan.matre/Downloads/Docker/Docker-Advanced-Project/smart-support-portal/python-analyzer/dev_server.py", line 17, in do_GET
+    self.wfile.write(b'{"status":"ok"}')
+  File "/usr/lib/python3.12/socketserver.py", line 840, in write
+    self._sock.sendall(b)
+BrokenPipeError: [Errno 32] Broken pipe
+----------------------------------------
+127.0.0.1 - - [04/Feb/2026 14:44:02] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [04/Feb/2026 14:44:12] "POST /analyze HTTP/1.1" 200 -
+127.0.0.1 - - [04/Feb/2026 14:47:12] "POST /analyze HTTP/1.1" 200 -
+127.0.0.1 - - [04/Feb/2026 14:49:41] "GET / HTTP/1.1" 404 -
+127.0.0.1 - - [04/Feb/2026 14:49:51] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [04/Feb/2026 14:50:09] "GET /analyze HTTP/1.1" 404 -
+127.0.0.1 - - [04/Feb/2026 14:50:12] "GET /analyze HTTP/1.1" 404 -
+127.0.0.1 - - [04/Feb/2026 14:57:25] "GET /health HTTP/1.1" 200 -
+127.0.0.1 - - [04/Feb/2026 15:22:06] "POST /analyze HTTP/1.1" 200 -
+127.0.0.1 - - [04/Feb/2026 15:22:46] "POST /analyze HTTP/1.1" 200 -
